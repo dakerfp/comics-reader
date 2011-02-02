@@ -1,7 +1,16 @@
-## XKCD Reader
-A [XKCD Reader](http://xkcd.com/) that intend to run on Maemo 5 and Symbian platforms.
+## Comics Reader
+1. A Comics Reader that intend to run on Maemo 5, MeeGo an Symbian platforms.
+2. A specific [XKCD Reader](http://xkcd.com/) is also being developed to run on Maemo 5, MeeGo an Symbian platforms.
 
 ## Build Instructions
-1.    You must have [Qt 4.7](http://qt.gitorious.org/qt) with qmlviewer
-2.    Run 
-      `qmlviewer ui/base.qml` from terminal.
+Comics Reader
+1.     You must have [Qt 4.7](http://qt.nokia.com/) with qmlviewer.
+2.     Run:
+       qmlviewer ui/base.qml
+
+XKCD Reader
+1.   You must have [Qt 4.7.2](ttp://qt.nokia.com/).
+2.   You must Have [PySide](http://www.pyside.org/).
+3.   Run:
+     cd xkcd
+     python xkcdReader.py
