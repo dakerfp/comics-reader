@@ -4,7 +4,7 @@
 import json
 import random
 from urllib2 import urlopen
-from QtCore import Qt, QAbstractListModel, QModelIndex
+from PySide.QtCore import Qt, QAbstractListModel, QModelIndex
 
 class XkcdModel(QAbstractListModel):
 
@@ -15,11 +15,14 @@ class XkcdModel(QAbstractListModel):
         lastComicInfo = json.loads(urlopen('http://xkcd.com/info.0.json').read())
         if not lastComicInfo:
             raise IOError('Could not fetch XKCD comic.')
-        self._lastComicId = lastComic['num']
-        self._cache = {lastComic['num']: XkcdModel._filterComicInfos(lastComicInfo)}
+        self._lastComicId = lastComicInfo['num']
+        self._cache = {lastComicInfo['num']: XkcdModel._filterComicInfos(lastComicInfo)}
 
 
-    def rowCount(self, parent=QtCore.QModelIndex()):
+    def rowCount(self, parent=None):
+        if parent is None:
+            parent = QModelIndex()
+
         return self._lastComicId
 
     @staticmethod
