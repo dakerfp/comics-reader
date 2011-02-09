@@ -18,7 +18,6 @@ class XkcdModel(QAbstractListModel):
         self._lastComicId = lastComicInfo['num']
         self._cache = {lastComicInfo['num']: XkcdModel._filterComicInfos(lastComicInfo)}
 
-
     def rowCount(self, parent=None):
         if parent is None:
             parent = QModelIndex()
@@ -30,15 +29,18 @@ class XkcdModel(QAbstractListModel):
         return {Qt.DisplayRole: fullComicInfo['title'], Qt.UserRole: fullComicInfo['img'],
                      Qt.ToolTipRole: fullComicInfo['alt'] }
 
+    def _translateComicId(self, comicId):
+        return self._lastComicId - comicId
+
     def _fetchXkcdJsonComic(self, comicId):
         if comicId in self._cache:
             return self._cache[comicId]
 
-        url = 'http://xkcd.com/%d/info.0.json' % (int(comicId)+1)
+        url = 'http://xkcd.com/%d/info.0.json' % (int(comicId))
         fullComicInfo = json.loads(urlopen(url).read())
 
         self._cache[fullComicInfo['num']] = XkcdModel._filterComicInfos(fullComicInfo)
-        return comicInfo
+        return self._cache[comicId]
 
     def getRandomComicId(self):
         return 4 # chosen by fair dice roll.
@@ -50,5 +52,5 @@ class XkcdModel(QAbstractListModel):
         if not role in self._validRoles and index > self._lastComicId:
             return None
 
-        comicId = index.row()
+        comicId = self._translateComicId(index.row())
         return self._fetchXkcdJsonComic(comicId)[role]
