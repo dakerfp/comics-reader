@@ -11,7 +11,7 @@ Rectangle {
     height: 480
     color: "white"
 
-    ListModel {
+    /*ListModel {
         id: xkcdModel
         ListElement {
             titleText: "Learning to Cook"
@@ -53,7 +53,7 @@ Rectangle {
             comicUrl: "http://imgs.xkcd.com/comics/consecutive_vowels.png"
             altText: "Nice Comic"
         }
-    }
+    }*/
 
     Component {
         id: comicDelegate
