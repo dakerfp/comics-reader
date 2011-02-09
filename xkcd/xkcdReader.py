@@ -13,7 +13,7 @@ app = QApplication(sys.argv)
 view = QDeclarativeView()
 context = view.rootContext()
 context.setContextProperty('xkcdModel', XkcdModel())
-view.setSource(QUrl('n900.qml'))
+view.setSource(QUrl.fromLocalFile('n900.qml'))
 view.show()
 
 sys.exit(app.exec_())
