@@ -93,7 +93,7 @@ Rectangle {
 
     Image {
         anchors.bottom: randomButton.top
-        anchors.left: randomButton.bottom
+        anchors.left: randomButton.left
         source: "images/random_number.png"
         visible: randomButton.pressed
     }
