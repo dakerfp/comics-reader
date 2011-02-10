@@ -6,6 +6,11 @@ import random
 from urllib2 import urlopen
 from PySide.QtCore import Qt, QAbstractListModel, QModelIndex
 
+from background import BackgroundServer, background
+
+bgServer = BackgroundServer()
+bgServer.start()
+
 class XkcdModel(QAbstractListModel):
 
     def __init__(self, parent=None):
@@ -32,25 +37,30 @@ class XkcdModel(QAbstractListModel):
     def _translateComicId(self, comicId):
         return self._lastComicId - comicId
 
-    def _fetchXkcdJsonComic(self, comicId):
-        if comicId in self._cache:
-            return self._cache[comicId]
+    @background(bgServer)
+    def _fetchXkcdJsonComic(self, comicId, index):
 
         url = 'http://xkcd.com/%d/info.0.json' % (int(comicId))
         fullComicInfo = json.loads(urlopen(url).read())
 
         self._cache[fullComicInfo['num']] = XkcdModel._filterComicInfos(fullComicInfo)
-        return self._cache[comicId]
+        self.dataChanged.emit(index)
 
     def getRandomComicId(self):
+        """
         return 4 # chosen by fair dice roll.
                  # guaranteed to be random.
-
+        """
         return random.randint(1, self._lastComicId)
 
     def data(self, index, role=Qt.DisplayRole):
         if not role in self._validRoles and index > self._lastComicId:
             return None
 
-        comicId = self._translateComicId(index.row())
-        return self._fetchXkcdJsonComic(comicId)[role]
+        comicId = index.row()
+        elif comicId in self._cache:
+            return self._cache[comicId][role]
+
+        else:
+            self._fetchXkcdJsonComic(comicId, index)
+            return ''
